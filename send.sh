@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-# ===== CONFIG =====
+# ===== CONFIG (ARGUMENT) =====
 BOT_TOKEN="$1"
 CHAT_ID="$2"
-
 FILE="$3"
 
 # ===== VALIDATION =====
-if [ -z "$FILE" ]; then
-  echo "Usage: ./send.sh <file.zip>"
+if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ] || [ -z "$FILE" ]; then
+  echo "Usage: ./send.sh <BOT_TOKEN> <CHAT_ID> <file.zip>"
   exit 1
 fi
 
@@ -17,10 +16,20 @@ if [ ! -f "$FILE" ]; then
   exit 1
 fi
 
-# ===== UPLOAD (GoFile, random server) =====
-response=$(curl -s -F "file=@$FILE" https://store1.gofile.io/contents/uploadfile)
+# ===== UPLOAD (GoFile with fallback servers) =====
+link=""
 
-link=$(echo "$response" | grep -oP '"downloadPage"\s*:\s*"\K[^"]+')
+for server in store1 store2 store3 store4; do
+  echo "Uploading to $server.gofile.io ..."
+  response=$(curl -s -F "file=@$FILE" "https://$server.gofile.io/contents/uploadfile")
+
+  link=$(echo "$response" | grep -oP '"downloadPage"\s*:\s*"\K[^"]+')
+
+  if [ -n "$link" ]; then
+    echo "Upload success on $server"
+    break
+  fi
+done
 
 if [ -z "$link" ]; then
   link="Upload failed"
