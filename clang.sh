@@ -6,9 +6,6 @@ clone(){
 BASE_URL=https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive
 CLANG_VER=$1
 CLANG_DIR=$(pwd)/$2
-ENTRY=${CLANG_MAP[$CLANG_VER]}
-HASH=${ENTRY%%:*}
-REV=${ENTRY##*:}
 
 declare -A CLANG_MAP=(
   [15]="13a934187ab34eec02565aff0d8a89518250e44f:r498229"
@@ -18,6 +15,10 @@ declare -A CLANG_MAP=(
   [19]="f45722cea929f932b08731a8d2d0a0737f1552cc:r536225"
   [20]="5299c17a7c78cfb703e3830ed02b74fb8fed77f9:r547379"
 )
+
+ENTRY=${CLANG_MAP[$CLANG_VER]}
+HASH=${ENTRY%%:*}
+REV=${ENTRY##*:}
 
 [ -z $CLANG_VER ] && { echo "Usage: $0 <clang_version> <dir>"; exit 1; }
 [ -z $CLANG_DIR ] && { echo "Usage: $0 <clang_version> <dir>"; exit 1; }
@@ -40,4 +41,4 @@ fi
 $CLANG_DIR/bin/clang --version || true
 }
 
-clome "$@"
+clone "$@"
