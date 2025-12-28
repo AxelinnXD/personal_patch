@@ -1,41 +1,40 @@
 #!/usr/bin/env bash
 
-# ===== CONFIG (ARGUMENT) =====
-BOT_TOKEN="$1"
-CHAT_ID="$2"
-FILE="$3"
+_log() {
+  echo
+}
 
-# ===== VALIDATION =====
-if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ] || [ -z "$FILE" ]; then
-  echo "Usage: ./send.sh <BOT_TOKEN> <CHAT_ID> <file.zip>"
-  exit 1
-fi
+send() {
+
+BOT_TOKEN=$BOT_TOKEN
+CHAT_ID=$CHAT_ID
+DATE=$(date -u "+%Y-%m-%d %H:%M:%S UTC")
+FILE=$1
+local BOT_TOKEN CHAT_ID DATE FILE LINK kernelver
 
 if [ ! -f "$FILE" ]; then
-  echo "File not found: $FILE"
+  _log "File not found: $FILE"
   exit 1
 fi
 
-# ===== UPLOAD (GoFile with fallback servers) =====
-link=""
+LINK=""
 
 for server in store1 store2 store3 store4; do
-  echo "Uploading to $server.gofile.io ..."
+  _log "Uploading to $server.gofile.io ..."
   response=$(curl -s -F "file=@$FILE" "https://$server.gofile.io/contents/uploadfile")
 
-  link=$(echo "$response" | grep -oP '"downloadPage"\s*:\s*"\K[^"]+')
+  LINK=$(_log "$response" | grep -oP '"downloadPage"\s*:\s*"\K[^"]+')
 
-  if [ -n "$link" ]; then
-    echo "Upload success on $server"
+  if [ -n "$LINK" ]; then
+    _log "Upload success on $server"
     break
   fi
 done
 
-if [ -z "$link" ]; then
-  link="Upload failed"
+if [ -z "$LINK" ]; then
+  LINK="Upload failed"
 fi
 
-# ===== KERNEL VERSION =====
 if [ -f Image.gz ]; then
   kernelver=$(zcat Image.gz | strings | grep "Linux version")
 elif [ -f Image ]; then
@@ -44,22 +43,20 @@ else
   kernelver="Kernel image not found"
 fi
 
-# ===== DATE =====
-date_now=$(date -u "+%Y-%m-%d %H:%M:%S UTC")
-
 # ===== CAPTION (Markdown) =====
 caption="*Build Success* 
 \`\`\`
 $kernelver
 \`\`\`
-*Date:* $date_now
-*Download:* $link"
+*Date:* $DATE
+*Download:* $LINK"
 
-# ===== SEND TO TELEGRAM =====
 curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
   -F chat_id="$CHAT_ID" \
-  -F document=@"$FILE" \
   -F parse_mode=Markdown \
   -F caption="$caption"
 
 echo "Done. Sent to Telegram."
+}
+
+send $@
