@@ -6,7 +6,7 @@ AK_BRANCH=$1
 AK_DIR=$2
 
 [ -z $AK_BRANCH ] && AK_BRANCH=gki
-[ -z $AK_DIR ] && AK_DIR=ak
+[ -z $AK_DIR ] && AK_DIR=$(pwd)/ak
 
 if [ ! -d "$AK_DIR" ]; then
   git clone --depth=1 --single-branch -b $AK_BRANCH \
