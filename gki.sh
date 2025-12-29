@@ -22,7 +22,7 @@ fetch_kernel_common() {
     repo init \
       --depth=1 \
       -u https://android.googlesource.com/kernel/manifest \
-      -b $BRANCH
+      -b "$BRANCH"
 
     _log "Pause 5s (network / auth sanity check)"
     sleep 5
@@ -33,7 +33,7 @@ fetch_kernel_common() {
   _log "[2/2] repo sync (this may take a while)"
   repo sync \
     -c \
-    -j"$(nproc)" \
+    -j"$(nproc --all)" \
     --no-tags \
     --fail-fast
 }
