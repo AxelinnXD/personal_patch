@@ -3,26 +3,17 @@
 set -euo pipefail
 
 _log() {
-  echo "[INFO] $*"
-}
-
-_warn() {
-  echo "[WARN] $*" >&2
-}
-
-_err() {
-  echo "[ERROR] $*" >&2
-  exit 1
+  echo "[INFO] $1"
 }
 
 fetch_kernel_common() {
-  local BRANCH="${1:-common-android12-5.10}"
-  local WORKDIR="gki-kernel"
+  local BRANCH=$1
+  local WORKDIR=$(pwd)/gki-kernel
 
   _log "Target kernel branch: $BRANCH"
 
-  if [ -d "$WORKDIR/.repo" ]; then
-    _warn "Kernel repo already exists, skipping repo init"
+  if [ -d $WORKDIR/.repo ]; then
+    _log "Kernel repo already exists, skipping repo init"
   else
     _log "Preparing workspace: $WORKDIR"
     mkdir -p "$WORKDIR"
