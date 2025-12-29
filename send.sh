@@ -3,7 +3,7 @@
 set -e
 
 _log() {
-  echo "[LOG] $1"
+  echo "[INFO] $1"
 }
 
 send() {
@@ -15,11 +15,11 @@ send() {
 
   DATE=$(date -u "+%Y-%m-%d %H:%M:%S UTC")
 
-  [ -z "${BOT_TOKEN:-}" ] && { echo "BOT_TOKEN not set"; exit 1; }
-  [ -z "${CHAT_ID:-}" ] && { echo "CHAT_ID not set"; exit 1; }
+  [ -z ${BOT_TOKEN:-} ] && { echo "BOT_TOKEN not set"; exit 1; }
+  [ -z ${CHAT_ID:-} ] && { echo "CHAT_ID not set"; exit 1; }
 
   if [ ! -f "$FILE" ]; then
-    echo "File not found: $FILE"
+    _log "File not found: $FILE"
     exit 1
   fi
 
@@ -58,7 +58,7 @@ $kernelver
     -F parse_mode=Markdown \
     -F text="$caption"
 
-  echo "Done. Message sent."
+  _log "Done. Message sent."
 }
 
 send "$@"
