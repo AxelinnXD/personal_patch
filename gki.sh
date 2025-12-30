@@ -10,7 +10,7 @@ cd $GKI_DIR
 
 # Prompt for branch name
 echo "Enter the branch name: "
-read FORMATTED_BRANCH
+read FORMATTED_BRANCH && ! -z FORMATTED_BRANCH; echo "branch not found; exit 1;
 
 # Initialize Kernel Source
 repo init --depth=1 -u https://android.googlesource.com/kernel/manifest -b $FORMATTED_BRANCH
