@@ -19,7 +19,7 @@ declare -A CLANG_MAP=(
   [19]="192fe0d378bb9cd4d4271de3e87145a1956fef40:r536225"
   [20]="62cdcefa89e31af2d72c366e8b5ef8db84caea62:r547379"
   [21]="ebcc6c3bef363bc539ea39f45b6abae1dce6ff1a:r574158"
-  [22]="167e11df8c330bced88cdf5808f61f41d9eab330:r584948"
+  [22]="105aba85d97a53d364585ca755752dae054b49e8:r584948b"
 )
 
 ENTRY=${CLANG_MAP[$CLANG_VER]}
