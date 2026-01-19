@@ -6,7 +6,7 @@
 BOT_TOKEN="$1"
 CHAT_ID="$2"
 MESSAGE="$3"
-PARSE_MODE="${4:-HTML}"
+PARSE_MODE="${4:-Markdown}"
 DISABLE_WEB_PREVIEW="${5:-true}"
 
 if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ] || [ -z "$MESSAGE" ]; then
