@@ -34,14 +34,12 @@ if [ ! -d $CLANG_DIR ]; then
   echo "[INFO] Fetching clang-$CLANG_VER ($REV)"
   mkdir -p $CLANG_DIR
   cd $CLANG_DIR
-
   curl -fL $BASE_URL/$HASH/clang-$REV.tar.gz -o clang.tar.gz
   tar -xf clang.tar.gz
   rm clang.tar.gz
-
-  echo "[OK] clang-$CLANG_VER installed"
+  echo "[√] clang-$CLANG_VER installed"
 else
-  echo "[SKIP] clang already exists: $CLANG_DIR"
+  echo "[!] clang already exists: $CLANG_DIR"
 fi
 
 $CLANG_DIR/bin/clang --version || true
