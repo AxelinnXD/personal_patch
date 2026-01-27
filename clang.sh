@@ -5,7 +5,7 @@ set -e
 clone(){
 BASE_URL=https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive
 CLANG_VER=$1
-CLANG_DIR=$(pwd)/$2
+CLANG_DIR=$2
 
 declare -A CLANG_MAP=(
   [11]="f71cc7fa68ac644595257d6fdebc2e543cb7041c:r383902"
